@@ -2,10 +2,11 @@
 
 .BtnContainer {
   margin: 0 auto;
+  margin-top: 15px;
   text-align: center;
 }
 
-.BtnContainer .Button {
+/* .BtnContainer .Button {
   height: 50px;
   width: 25%;
   border-radius: 5px;
@@ -22,5 +23,37 @@
   color: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(0, 0, 0, 0.5);
   cursor: pointer;
-}
+} */
 
+
+button {
+  width: 9em;
+  height: 4em;
+  border-radius: 30em;
+  font-size: 15px;
+  font-family: inherit;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 3px 3px 6px #c5c5c5,
+              -3px -3px 6px #d4d4d4;
+ }
+ 
+ button::before {
+  content: '';
+  width: 0;
+  height: 4em;
+  border-radius: 30em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(to right, #fcfcfc 0%, #9b9b9b 100%);
+  transition: .5s ease;
+  display: block;
+  z-index: -1;
+ }
+ 
+ button:hover::before {
+  width: 9em;
+ }
