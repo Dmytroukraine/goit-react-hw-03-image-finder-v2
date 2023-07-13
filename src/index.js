@@ -1,14 +1,10 @@
-import axios from 'axios';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from 'components/App';
+import './index.css';
 
-const KEY = '30122365-dbc077ba4413dccabf9c250c7';
-const BASE_URL = 'https://pixabay.com/api';
-
-async function fetchPictures(query, page) {
-  const url = `${BASE_URL}/?key=${KEY}&q=${query}&page=${page}&per_page=12&image_type=photo&orientation=horizontal&safesearch=true`;
-
-  const { data } = await axios.get(url);
-
-  return data;
-}
-
-export default fetchPictures;
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
