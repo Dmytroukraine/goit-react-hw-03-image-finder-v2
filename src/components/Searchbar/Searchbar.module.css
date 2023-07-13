@@ -1,94 +1,74 @@
-/*
- * Стили компонента Searchbar
- */
- .Searchbar {
-    top: 0;
-    left: 0;
-    position: sticky;
-    z-index: 1100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 64px;
-    padding-right: 24px;
-    padding-left: 24px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    color: #fff;
-    background-color: #2196f3;
-    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
-      0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  
-  /*
-   * Стили компонента SearchForm
-   */
-  .SearchForm {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 600px;
-    background-color: #fff;
-    border-radius: 3px;
-    overflow: hidden;
-    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
-      0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  
-  .SearchForm__button {
-    display: inline-block;
-    width: 48px;
-    height: 48px;
-    border: 0;
-    background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg');
-    background-size: 40%;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.6;
-    transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    outline: none;
-  }
-  
-  .SearchForm__button:hover {
-    opacity: 1;
-  }
-  
-  .SearchForm__buttonLabel {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    clip-path: inset(50%);
-    border: 0;
-  }
-  
-  .SearchForm__input {
-    display: inline-block;
-    width: 100%;
-    font: inherit;
-    font-size: 20px;
-    line-height: 1.7;
-    border: none;
-    outline: none;
-    padding-left: 4px;
-    padding-right: 4px;
-  }
-  
-  .SearchForm__input::placeholder {
-    font: inherit;
-    font-size: 18px;
-  }
-  
-  .EmptySearch {
-    margin: 0;
-    padding-top: 50px;
-    text-align: center;
-    font: inherit;
-    font-size: 30px;
-    color: #9e9e9e;
-  }
+
+
+.Searchbar {
+  top: 0;
+  left: 0;
+  position: sticky;
+  z-index: 1100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 64px;
+  padding-right: 24px;
+  padding-left: 24px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #fff;
+  background-color: #3f51b5;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.Searchbar .SearchForm {
+  margin: 0 auto;
+  max-width: 700px;
+  height: 40px;
+  background: rgba(14, 14, 231, 0.5);
+  border-radius: 5px;
+  border: 1px solid #fff;
+}
+
+.Searchbar .SearchForm .SearchFormInput {
+  max-width: 370px;
+  padding: 10px 5px;
+  float: left;
+  color: #000;
+  font-weight: 800;
+  border: 0;
+  background: transparent;
+  border-radius: 5px 0 0 5px;
+}
+
+.Searchbar .SearchForm .SearchFormInput:focus {
+  outline: 0;
+  background: transparent;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.Searchbar .SearchForm .SearchFormButton {
+  position: relative;
+  float: right;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  fill: rgba(255, 255, 255, 0.8);
+  background: transparent;
+  border-left: 1px solid #fff;
+  border-radius: 0 5px 5px 0;
+}
+
+.Searchbar .SearchForm .SearchFormButton:hover {
+  background: rgba(235, 243, 7, 0.899);
+  fill: #444;
+}
+
+.Searchbar .SearchForm .SearchFormButton:active {
+  -webkit-box-shadow: 0px 0px 12px 0px #e1e1e1;
+  box-shadow: 0px 0px 12px 0px #e1e1e1;
+}
+
+.Searchbar .SearchForm .SearchFormButton:focus {
+  outline: 0;
+}

@@ -1,137 +1,103 @@
-import { Component } from 'react';
-import fetchPictures from 'components/API/pixabayImages-api';
-import { ImageGallery } from './ImageGallery/ImageGallery';
-import { Button } from './Button/Button';
-import { Loader } from './Loader/Loader';
-import Modal from './Modal/Modal';
-import Searchbar from './Searchbar/Searchbar';
-import style from './Searchbar/Searchbar.module.css';
 
-const Status = {
-  IDLE: 'idle',
-  PENDING: 'pending',
-  RESOLVED: 'resolved',
-  REJECTED: 'rejected',
-};
 
-export default class App extends Component {
+import React, { Component } from "react";
+import axios from "axios";
+import Notiflix from "notiflix";
+
+import { BASE_URL, API_KEY, SEARCH_PARAMS } from "./Pixabay/Pixabay";
+import Searchbar from "./Searchbar/Searchbar";
+import ImageGallery from "./ImageGallery/ImageGallery";
+import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
+import LoadMoreButton from "./Button/Button"
+import SpinnerLoader from "./Loader/Loader"
+import Modal from "./Modal/Modal";
+
+
+ class App extends Component {
+
   state = {
-    imageName: '',
-    images: [],
+    hits: [],
+    name: '',
     page: 1,
-    showButton: false,
     showModal: false,
-    status: Status.IDLE,
-    modalImage: '',
-    imageAlt: '',
+    loading: false,
+    largeImegeURL: '',
+    tags: '',
   };
 
-  componentDidUpdate(_, prevState) {
-    const prevName = prevState.imageName;
-    const nextName = this.state.imageName;
+  toggleModal = (imageURL, tag) => {
+    this.setState(({showModal}) => ({
+      showModal: !showModal,
+      largeImegeURL: imageURL,
+      tags: tag,
+    }));
+  };
 
-    const prevPage = prevState.page;
-    const nextPage = this.state.page;
-
-    if (prevName !== nextName || prevPage !== nextPage) {
-      this.setState({ status: Status.PENDING });
-
-      fetchPictures(nextName, this.state.page)
-        .then(images => {
-          if (images.hits.length < 1) {
-            this.setState({
-              showButton: false,
-              status: Status.IDLE,
-            });
-            return alert('No images on your query');
+  getValue = ({name, page}) => {
+    this.setState({loading: true});
+    try {
+      axios
+        .get(
+          `${BASE_URL}?key=${API_KEY}&q=${name}&page=${page}&${SEARCH_PARAMS}`
+        )
+        .then(response => {
+          if (!response.data.hits.length) {
+            Notiflix.Notify.failure('No images found!');
           }
-
-          this.setState(prevState => ({
-            images: [...prevState.images, ...images.hits],
-          }));
-
-          this.setState({
-            status: Status.RESOLVED,
-            showButton:
-              this.state.page < Math.ceil(images.total / 12) ? true : false,
-          });
-        })
-
-        .then(console.log(this.state.images))
-        .catch(error => console.log(error));
-    }
-  }
-
-  handleFormSubmit = imageName => {
-    if (imageName === this.state.imageName) {
-      return;
-    }
-
-    this.setState({
-      imageName,
-      page: 1,
-      images: [],
-      showButton: false,
-      showModal: false,
-      status: Status.IDLE,
-    });
+          else if (name === this.state.name) {
+            this.setState(state => ({
+              hits: [...state.hits, ...response.data.hits],
+              name: name,
+              page: state.page + 1,
+              loading: false,
+            }));
+          }
+          else {
+            this.setState(state => ({
+              hits:response.data.hits,
+              name: name,
+              page: state.page + 1,
+              loading: false,
+            }));
+          }
+        });
+    } catch (error) {
+        console.error(error.message);
+    } 
   };
 
-  loadMoreImages = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+
+
+  loadMore = () => {
+    this.getValue(this.state);
   };
 
-  handleModalImage = event => {
-    this.setState({ modalImage: event });
-  };
 
-  handleModalAlt = event => {
-    this.setState({ imageAlt: event });
-  };
-
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
-  };
-
-  render() {
-    const { images, status, showModal, modalImage, imageAlt, showButton } =
-      this.state;
-
-    const {
-      handleFormSubmit,
-      toggleModal,
-      handleModalImage,
-      handleModalAlt,
-      loadMoreImages,
-    } = this;
+  render () {
+    const {hits, showModal, loading, largeImegeURL, tags} = this.state;
 
     return (
-      <>
-        <Searchbar onSubmit={handleFormSubmit} />
+      <div>
 
-        {status === 'idle' && (
-          <h2 className={style.EmptySearch}>Search something!</h2>
-        )}
+         <Searchbar onSubmitHandler={this.getValue} />
 
-        {status === 'pending' && <Loader />}
+         {hits && (
+           <ImageGallery>
+             <ImageGalleryItem articles={hits} onImage={this.toggleModal} />
+           </ImageGallery>
+         )}
 
-        {images.length > 0 && (
-          <ImageGallery
-            showModal={toggleModal}
-            images={images}
-            handleModalImage={handleModalImage}
-            handleModalAlt={handleModalAlt}
-          />
-        )}
+         {showModal && (<Modal onClose={this.toggleModal} url={largeImegeURL} alt={tags} />)}
 
-        {showButton && <Button onClick={loadMoreImages} />}
+         {loading && <SpinnerLoader />}
 
-        {showModal && (
-          <Modal onClose={toggleModal}>
-            <img src={modalImage} alt={imageAlt} />
-          </Modal>
-        )}
-      </>
+         {hits.length > 0 && (
+          <LoadMoreButton onButtonClick={() => this.loadMore()} />
+         )}
+
+      </div>
     );
   }
 }
+
+export default App;

@@ -1,51 +1,70 @@
-import { Component } from 'react';
-import { FcSearch } from 'react-icons/fc';
-import style from './Searchbar.module.css';
 
-export default class Searchbar extends Component {
+
+
+import React, { Component } from 'react';
+import Notiflix from 'notiflix';
+import styles from './Searchbar.module.css';
+
+class Searchbar extends Component {
   state = {
-    searchImage: '',
+    name: '',
+    page: 1,
   };
 
-  handleImageChange = event => {
-    this.setState({ searchImage: event.currentTarget.value.toLowerCase() });
+  handleChange = event => {
+    const { value } = event.currentTarget;
+    this.setState({ name: value });
   };
 
   handleSubmit = event => {
     event.preventDefault();
 
-    if (this.state.searchImage.trim() === '') {
-      return alert('Please, enter image name.');
+    if (this.state.name.trim() === '') {
+      Notiflix.Notify.failure(
+        'search string is empty!'
+      );
+      return;
     }
 
-    this.props.onSubmit(this.state.searchImage);
+    this.props.onSubmitHandler(this.state);
 
-    this.setState({ searchImage: '' });
+    this.reset();
   };
+
+  reset() {
+    this.setState({ name: '' });
+  }
 
   render() {
     return (
-      <header className={style.Searchbar}>
-        <h1 className="visually-hidden">images gallery</h1>
-        <form className={style.SearchForm} onSubmit={this.handleSubmit}>
-          <label htmlFor="searchInput"></label>
+      <header className={styles.Searchbar}>
+        <form className={styles.SearchForm} onSubmit={this.handleSubmit}>
+          <button type="submit" className={styles.SearchFormButton}>
+            <span className={styles.SearchFormButtonLabel}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="25"
+                height="25"
+                viewBox="0 0 20 20"
+              >
+                <title>search</title>
+                <path d="M19 17l-5.15-5.15a7 7 0 1 0-2 2L17 19zM3.5 8A4.5 4.5 0 1 1 8 12.5 4.5 4.5 0 0 1 3.5 8z" />
+              </svg>
+            </span>
+          </button>
+
           <input
-            id="searchInput"
+            className={styles.SearchFormInput}
             type="text"
-            name="image"
+            onChange={this.handleChange}
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.searchImage}
-            className={style.SearchForm__input}
-            onChange={this.handleImageChange}
-          ></input>
-          <button type="submit" className={style.SearchForm__button}>
-            <FcSearch size={30} />
-            <span className={style.SearchForm__buttonLabel}>Search</span>
-          </button>
+          />
         </form>
       </header>
     );
   }
 }
+
+export default Searchbar;
