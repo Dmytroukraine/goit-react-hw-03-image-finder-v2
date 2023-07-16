@@ -20,7 +20,6 @@ class App extends Component {
       showModal: false,
       loading: false,
       largeImageURL: "",
-      tags: "",
       totalHits: 0,
     };
   }
@@ -53,8 +52,6 @@ class App extends Component {
     });
   };
 
-  
-
   fetchImages = () => {
     const { name, page } = this.state;
     this.setState({ loading: true });
@@ -67,14 +64,12 @@ class App extends Component {
           if (!response.data.hits.length) {
             Notiflix.Notify.failure("No images found!");
           }
-          const modifiedHits = response.data.hits.map(
-            ({ id, tags, webformatURL, largeImageURL }) => ({
-              id,
-              tags,
-              webformatURL,
-              largeImageURL,
-            })
-          );
+          const modifiedHits = response.data.hits.map(({ id, tags, webformatURL, largeImageURL }) => ({
+            id,
+            tags,
+            webformatURL,
+            largeImageURL,
+          }));
           this.setState((prevState) => ({
             hits: [...prevState.hits, ...modifiedHits],
             totalHits: response.data.totalHits,
@@ -99,7 +94,6 @@ class App extends Component {
       showModal,
       loading,
       largeImageURL,
-      
       totalHits,
     } = this.state;
 
