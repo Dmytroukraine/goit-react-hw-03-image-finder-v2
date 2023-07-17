@@ -8,8 +8,7 @@ import styles from './Searchbar.module.css';
 class Searchbar extends Component {
   state = {
     name: '',
-    page: 1,
-  };
+ };
 
   handleChange = event => {
     const { value } = event.currentTarget;
